@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <title>Edit Wish</title>
+    <style>
+        .big_form{
+                margin: 25px;
+                padding: 15px;
+                border-style: solid;
+                border-width: 5px;
+                border-radius: 8px;
+                width: 483px;
+            }
+        .error{
+                color: red;
+            }
+            
+        .new_user {
+            vertical-align: top;
+            display: inline-block;
+            vertical-align: top;
+            margin: 10px 0 0px 30px;
+            text-decoration: underline;
+        }
+        .go_back{
+            margin-left: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 class='new_user'>Hello {{ user.first_name }}! Let's edit your wish!</h2>
+    <form class='big_form' action="/update/{{wish.id}}" method='POST'>
+        {% csrf_token %}
+        <div class="form-group">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <label for="exampleFormControlInput1">I wish for:</label>
+            <input type="text" class="form-control" value='{{ wish.item }}' id="exampleFormControlInput1" name='item'>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Description:</label>
+            <input type="text" class="form-control" value="{{ wish.desc }}" id="exampleFormControlInput1" name='desc'>
+        </div>
+        <button type="submit" value='submit' class="btn btn-success">Edit</button>
+        <a class='go_back' href="/wishes">Cancel</a>
+    </form>
+</body>
+
+</html>

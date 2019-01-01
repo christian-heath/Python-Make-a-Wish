@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <title>Stats</title>
+    <style>
+        h1 {
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h3{
+            display: block;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        #back{
+            padding: 8px;
+            background-color: blue;
+            border-radius: 5px;
+            color: white;
+        }
+        h6{
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='header'>
+        <h1>Hello {{ user.first_name }}</h1>
+        <h1>Total wishes granted so far for all users: {{ granted_wishes }}</h1>
+    </div>
+    <h3>Your granted wishes: {{ user_granted_wishes }}</h3>
+    <h3>Your pending wishes: {{ user_pending_wishes }}</h3>
+        <h6><a id="back" href="/wishes">Go back</a></h6>
+</body>
+</html>

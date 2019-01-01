@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <title>Users</title>
+    <style>
+        h1 {
+            vertical-align: top;
+        }
+        .header{
+            display: inline-block;
+            vertical-align: top;
+            margin: 10px 0 0px 20px;
+
+        }
+        .new_wish{
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .stats{
+            margin-left: 10px;
+        }
+        #introduction{
+            margin-right: 30px;
+        }
+        #grant_table{
+            margin-top: 200px;
+        }
+        #wish_table{
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-grey">
+        <h4 id="introduction" class='header'>Hello {{ user.first_name }}</h4>
+        <form method='post' action="/logout">
+            {% csrf_token %}
+            <button type="submit" value='submit' id="logout" class="btn btn-danger">Logout</button>
+        </form>
+        <a class="new_wish" href="/new">Make a wish!</a>
+        <a class="stats" href="/stats">View stats!</a>
+    </nav>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{message.tags}}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div id='wish_table'>
+        <table class="table">
+            <thead>
+                <p>Your wishes</p>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Date added</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete Wish</th>
+                    <th scope='col'>Grant Wish</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for wish in wishes %}
+                <tr>
+                    <th scope="row">{{ wish.item }}</th>
+                    <td>{{ wish.created_at }}</td>
+                    <td><a href="/edit/{{wish.id}}">Edit</a></td>
+                    <td>
+                        <form action="/delete" method='POST'>
+                            {% csrf_token %}
+                            <input type="hidden" name='wish_id' value="{{ wish.id }}">
+                            <button class="btn btn-danger" type="submit">Remove</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/grant" method='POST'>
+                            {% csrf_token %}
+                            <input type="hidden" name='user_id' value="{{ user.id}}">
+                            <input type="hidden" name='wish_item' value="{{ wish.item }}">
+                            <input type="hidden" name='wish_id' value="{{ wish.id }}">
+                            <input type="hidden" name='wish_created' value="{{ wish.created_at }}">
+                            <button class="btn btn-success" type="submit">Grant</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id='grant_table'>
+        <table class="table">
+            <thead>
+                <p>Granted wishes</p>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Wisher</th>
+                    <th scope="col">Date added</th>
+                    <th scope="col">Date granted</th>
+                    <th scope="col">Likes</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grant in granted_wishes %}
+                <tr>
+                    <th scope="row">{{ grant.item }}</th>
+                    <td>{{ grant.user.first_name }}</td>
+                    <td>{{ grant.date_added }}</td>
+                    <td>{{ grant.granted_at }}</td>
+                    <td>{{ grant.likes.count }}</td>
+                    <td><form action="/like" method='POST'>
+                        {% csrf_token %}
+                        <input type="hidden" name='grant_id' value="{{ grant.id }}">
+                        <input type="hidden" name='user_id' value="{{ user.id }}">
+                        <button class="btn btn-success" type="submit">Like</button>
+                    </form></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
